@@ -1,4 +1,3 @@
-
 -- Ejercicio 1: Selecciona todos los clientes cuyo email contenga
 --           el dominio 'hotmail'.
 
@@ -88,10 +87,9 @@ WHERE stock > 0;
 
 
 
--- Ejercicio 11: Selecciona 30 clientes aleatorios mostrando su email
---           y dos columnas indicadoras: una para Gmail (1 si es
---           @gmail.com, 0 si no) y otra para Hotmail ('¡AQUI!'
---           si es @hotmail.com, 0 si no).
+-- Ejercicio 11: Obtén una muestra aleatoria de 30 clientes y categoriza sus emails
+--           en dos nuevas columnas: una indicando numéricamente si es Gmail
+--           y otra destacando con un mensaje si es Hotmail.
 
 SELECT 
     email, 
@@ -103,11 +101,9 @@ LIMIT 30;
 
 
 
--- Ejercicio 12: Crea una nueva tabla llamada 'investment' con los
---           siguientes campos:
---           - investment_id: ID único con autoincremento
---           - product_id: referencia al producto (requerido)
---           - investment: monto de inversión (por defecto 0)
+-- Ejercicio 12: Diseña y crea una tabla para almacenar el valor monetario del inventario,
+--           definiendo un identificador propio, la referencia al producto y el monto
+--           de inversión (por defecto 0).
 
 CREATE TABLE investment (
     investment_id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
@@ -116,19 +112,22 @@ CREATE TABLE investment (
 );
 
 
--- Ejercicio 13: Inserta en la tabla 'investment' el cálculo de
---           inversión total para cada producto (stock * precio).
+-- Ejercicio 13: Puebla la tabla de inversiones calculando y almacenando el valor
+--           total actual (precio * stock) de cada producto existente.
 
 INSERT INTO investment(product_id, investment)
 SELECT product_id, stock * Price FROM products;
 
---Ejercicio 14
+-- Ejercicio 14: Enriquece la información de la tabla de inversiones cruzándola
+--           con los datos maestros de productos para visualizar todos los detalles.
 
 SELECT * FROM investment
 LEFT  JOIN products 
-ON investment.product_id = products.product_id
+ON investment.product_id = products.product_id;
 
---Ejercicio 15
+-- Ejercicio 15: Genera un reporte de inversiones y productos, filtrando aquellos con
+--           una inversión significativa (> 40,000) y cuyo ID de producto sea múltiplo
+--           de 10. Ordena el resultado por el monto invertido.
 
 SELECT * FROM investment
 LEFT  JOIN products 
@@ -139,7 +138,9 @@ AND investment.product_id % 10 = 0
 --hay que espesificar a cual nos referimos con investment.product_id
 ORDER BY investment;
 
---Ejercicio 16: Usar alias en tablas
+-- Ejercicio 16: Refina el reporte anterior para mostrar únicamente el ID (renombrado),
+--           nombre, precio e inversión. Utiliza alias de tabla para simplificar
+--           la escritura de la consulta.
 
 SELECT p.product_id AS p_id, p.name, p.price, i.investment 
 FROM investment AS i
@@ -149,17 +150,9 @@ WHERE i.investment > 40000
 AND i.product_id % 10 = 0 
 ORDER BY investment;
 
---Ejercicio 16: Usar alias en tablas
-
-SELECT p.product_id AS p_id, p.name, p.price, i.investment 
-FROM investment AS i
-LEFT  JOIN products AS p
-ON i.product_id = p.product_id
-WHERE i.investment > 40000
-AND i.product_id % 10 = 0 
-ORDER BY investment;
-
---Ejercicio 16: Usar alias en tablas
+-- Ejercicio 17: Realiza una auditoría de datos sobre los registros filtrados: calcula
+--           el stock teórico basado en la inversión y compáralo con el stock real,
+--           generando una columna que valide si los datos son consistentes ('True' o 'Error').
 
 SELECT p.product_id AS p_id, p.name, p.price, i.investment, 
 ROUND(i.investment/ p.price) AS stock_calculado,
@@ -170,3 +163,4 @@ ON i.product_id = p.product_id
 WHERE i.investment > 40000
 AND i.product_id % 10 = 0 
 ORDER BY investment;
+
