@@ -1,4 +1,5 @@
--- Ejercicio 1: Extrae el año de incorporación de todos los alumnos para realizar un análisis de cohortes anuales.
+-- Ejercicio 1: Extrae el año de incorporación de todos los alumnos 
+--para realizar un análisis de cohortes anuales.
 SELECT EXTRACT(YEAR FROM fecha_incorporacion) AS anion_incorporacion
 FROM platzi.alumno;
 
@@ -6,7 +7,8 @@ FROM platzi.alumno;
 SELECT DATE_PART('YEAR', fecha_incorporacion) AS anion_incorporacion
 FROM platzi.alumnos;
 
--- Ejercicio 2: Desglosa la fecha de incorporación en sus componentes (año, mes, día, hora, minuto, segundo) para un análisis temporal detallado.
+-- Ejercicio 2: Desglosa la fecha de incorporación en sus componentes 
+--(año, mes, día, hora, minuto, segundo) para un análisis temporal detallado.
 SELECT 
     id, nombre,
     DATE_PART('YEAR', fecha_incorporacion) AS year_incorporacion,
@@ -38,7 +40,8 @@ AND (DATE_PART('MONTH', fecha_incorporacion) = 05)
 )
 ;
 
--- Ejercicio 5: Detecta inconsistencias buscando registros que compartan el mismo ID dentro de la tabla de alumnos.
+-- Ejercicio 5: Detecta inconsistencias buscando registros que compartan el mismo ID 
+--dentro de la tabla de alumnos.
 SELECT *
 FROM platzi.alumnos AS ou
 WHERE(
@@ -47,13 +50,15 @@ WHERE(
 	WHERE ou.id = inr.id
 )> 1 ;
 
--- Ejercicio 6: Agrupa los registros por su contenido completo (convertido a texto) para contar ocurrencias exactas de filas completas.
+-- Ejercicio 6: Agrupa los registros por su contenido completo (convertido a texto) 
+--para contar ocurrencias exactas de filas completas.
 SELECT (platzi.alumnos.*)::text, COUNT(*)
 FROM platzi.alumnos
 GROUP BY platzi.alumnos.*
 ;
 
--- Ejercicio 7: Encuentra alumnos duplicados basándose en sus datos personales y académicos (ignorando el ID), ordenados por frecuencia de repetición.
+-- Ejercicio 7: Encuentra alumnos duplicados basándose en sus datos personales y 
+--académicos (ignorando el ID), ordenados por frecuencia de repetición.
 SELECT (
 	platzi.alumnos.nombre, --No se tiene en cuenta la columna id
 	platzi.alumnos.apellido, 
@@ -73,7 +78,8 @@ GROUP BY platzi.alumnos.nombre,
 ORDER BY Repetidos DESC
 ;
 
--- Ejercicio 8: Muestra explícitamente los datos de los alumnos que aparecen más de una vez en el sistema.
+-- Ejercicio 8: Muestra explícitamente los datos de los alumnos que 
+--aparecen más de una vez en el sistema.
 SELECT (
 	platzi.alumnos.nombre, 
 	platzi.alumnos.apellido, 
@@ -93,7 +99,8 @@ GROUP BY platzi.alumnos.nombre,
 HAVING COUNT(*) > 1
 ;
 
--- Ejercicio 9: Identifica los registros duplicados asignándoles un número de fila, marcando aquellos que son redundantes (row > 1).
+-- Ejercicio 9: Identifica los registros duplicados asignándoles un número de fila, 
+--marcando aquellos que son redundantes (row > 1).
 SELECT *
 FROM (
 	SELECT id,
@@ -113,7 +120,8 @@ FROM (
 WHERE duplicados.row > 1
 ;
 
--- Ejercicio 10: Ejecuta un proceso de limpieza de datos: verifica duplicados por email, identifica sus IDs y elimina los registros redundantes.
+-- Ejercicio 10: Ejecuta un proceso de limpieza de datos: 
+--verifica duplicados por email, identifica sus IDs y elimina los registros redundantes.
 
 -- Paso 1: Certificar que existen correos duplicados.
 SELECT email,COUNT(*)
@@ -131,7 +139,7 @@ WHERE duplicados.row > 1;
 
 -- Paso 3: Borrar el registro duplicado.
 DELETE FROM platzi.alumnos
-where id = (
+WHERE id = ( -- Si hay mas de un duplicado va "IN" en lugar de "=" 
 SELECT id 
 FROM (
 	SELECT id, ROW_NUMBER() OVER(PARTITION BY email ORDER BY id) AS row
@@ -139,30 +147,3 @@ FROM (
 ) AS duplicados
 WHERE duplicados.row > 1
 );
-
-
--- Ejercicio 11:
-
-
--- Ejercicio 12:
-
-
--- Ejercicio 13:
-
-
--- Ejercicio 14:
-
-
--- Ejercicio 15:
-
-
--- Ejercicio 16:
-
-
--- Ejercicio 17:
-
-
--- Ejercicio 18:
-
-
--- Ejercicio 19:
