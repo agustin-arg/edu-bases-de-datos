@@ -45,3 +45,29 @@ SELECT numrange(
     (SELECT max(carrera_id) FROM platzi.alumnos)
 );
 
+-- Ejercicio :
+select * 
+from platzi.alumnos
+order by fecha_incorporacion DESC
+limit 1 ;
+
+-- Ejercicio :
+select * 
+from platzi.alumnos
+where carrera_id in (20,21,22)
+order by fecha_incorporacion DESC
+;
+
+-- Ejercicio :
+SELECT carrera_id, MAX(fecha_incorporacion)
+FROM platzi.alumnos
+GROUP BY carrera_id
+ORDER BY carrera_id
+;
+
+-- Ejercicio :
+SELECT tutor_id, MIN(nombre) AS Nombre_Alumno
+FROM platzi.alumnos
+GROUP BY tutor_id
+ORDER BY tutor_id
+;
